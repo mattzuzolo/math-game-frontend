@@ -8,7 +8,9 @@ const gameUrl = "http://localhost:3000/api/v1/games"
 
 //Elements
 const playerUl = document.getElementById('player-list');
-
+const timerContainer = document.getElementById('timer-container');
+const questionContainer = document.getElementById('question-container');
+const answerContainer = document.getElementById('answer-container');
 
 fetch(userUrl)
 .then(response=>response.json())
@@ -69,4 +71,75 @@ function addGameBackend(userId, score){
      return fetch(gameUrl, postConfig)
    }
    addGame(gameUrl,submissionBody)
+}
+
+document.getElementById("start-game").addEventListener("click", gameSetup)
+
+function gameSetup() {
+
+    //create timer
+    let timer = document.createElement("h4");
+    timer.style.textAlign = "center";
+    timer.innerText = `There are 30 seconds remaining!`
+    timerContainer.append(timer);
+
+    //create question
+    let question = document.createElement("h2");
+    question.style.textAlign = "center";
+    question.innerText = `5 x 7 = ?`
+    questionContainer.append(question);
+
+    //create answer form
+    let answerForm = document.createElement("form")
+    let inputField = document.createElement("input")
+    let submitButton = document.createElement("button")
+
+    answerForm.style.textAlign = "center";
+    submitButton.innerText = "Submit answer"
+
+    inputField.id = "user-input"
+    submitButton.id = "submit-answer"
+
+    answerForm.append(inputField);
+    answerForm.append(submitButton);
+    answerContainer.append(answerForm);
+
+
+}
+
+
+function mathQuiz() {
+
+  //determintes question type (+, -, *, /)
+  questionType=Math.floor((Math.random() * 4) + 1)
+
+  //addition
+  if (questionType===1){
+    number1=Math.floor((Math.random() * 300) + 1)
+    number2=Math.floor((Math.random() * 300) + 1)
+    answer=number1+number2
+    console.log(`${number1} + ${number2}`)
+
+  //subtraction
+  }else if (questionType===2) {
+    number1=Math.floor((Math.random() * 300) + 1)
+    number2=Math.floor((Math.random() * 300) + 1)
+    answer=number1-number2
+    console.log(`${number1} - ${number2}`)
+
+  //multiplication
+  }else if (questionType===3) {
+    number1=Math.floor((Math.random() * 15) + 1)
+    number2=Math.floor((Math.random() * 15) + 1)
+    answer=number1*number2
+    console.log(`${number1} * ${number2}`)
+
+  //division
+  }else if (questionType===4) {
+    number1=Math.floor((Math.random() * 15) + 1)
+    number2=Math.floor((Math.random() * 15) + 1)
+   answer=number1/number2
+  console.log(`${number1} / ${number2}`)
+  }
+
 }
