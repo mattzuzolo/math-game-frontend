@@ -75,12 +75,22 @@ function addGameBackend(userId, score){
 
 document.getElementById("start-game").addEventListener("click", gameSetup)
 
+function countdown(timer){
+  let startingTime = 60; //60 seconds on clock to start
+  setInterval(function(){
+    startingTime--;
+    timer.innerText = `There are ${startingTime} seconds remaining!`
+  }, 1000)
+}
+
 function gameSetup() {
+
+
 
     //create timer
     let timer = document.createElement("h4");
     timer.style.textAlign = "center";
-    timer.innerText = `There are 30 seconds remaining!`
+    countdown(timer)
     timerContainer.append(timer);
 
     //create question
