@@ -97,8 +97,8 @@ function gameSetup() {
     //create question
     let question = document.createElement("h2");
     question.style.textAlign = "center";
-    question.innerText =
-    questionContainer.append(currentQuestion);
+    question.innerText = currentQuestion
+    questionContainer.append(question);
 
     //create answer form
     let answerForm = document.createElement("form")
@@ -118,7 +118,7 @@ function gameSetup() {
 
     answerForm.addEventListener("click", function(e){
         e.preventDefault();
-        
+
         if (e.target.id === "submit-answer"){
           debugger;
           let userAnswer = parseInt(e.target.parentElement.getElementsByTagName("INPUT")[0].value);
