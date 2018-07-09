@@ -85,7 +85,8 @@ function countdown(timer){
 
 function gameSetup() {
 
-
+    let currentQuestion = mathQuiz();
+    let currentAnswer = answer;
 
     //create timer
     let timer = document.createElement("h4");
@@ -96,8 +97,8 @@ function gameSetup() {
     //create question
     let question = document.createElement("h2");
     question.style.textAlign = "center";
-    question.innerText = `5 x 7 = ?`
-    questionContainer.append(question);
+    question.innerText =
+    questionContainer.append(currentQuestion);
 
     //create answer form
     let answerForm = document.createElement("form")
@@ -107,6 +108,7 @@ function gameSetup() {
     answerForm.style.textAlign = "center";
     submitButton.innerText = "Submit answer"
 
+    answerForm.id = "answer-form"
     inputField.id = "user-input"
     submitButton.id = "submit-answer"
 
@@ -114,8 +116,23 @@ function gameSetup() {
     answerForm.append(submitButton);
     answerContainer.append(answerForm);
 
+    answerForm.addEventListener("click", function(e){
+        e.preventDefault();
+        
+        if (e.target.id === "submit-answer"){
+          debugger;
+          let userAnswer = parseInt(e.target.parentElement.getElementsByTagName("INPUT")[0].value);
+
+          if (userAnswer == currentAnswer){
+            alert("Correct!")
+          }
+
+        }
+    })
 
 }
+
+
 
 
 function mathQuiz() {
@@ -128,28 +145,29 @@ function mathQuiz() {
     number1=Math.floor((Math.random() * 300) + 1)
     number2=Math.floor((Math.random() * 300) + 1)
     answer=number1+number2
-    console.log(`${number1} + ${number2}`)
+    return(`${number1} + ${number2}`)
 
   //subtraction
   }else if (questionType===2) {
     number1=Math.floor((Math.random() * 300) + 1)
     number2=Math.floor((Math.random() * 300) + 1)
     answer=number1-number2
-    console.log(`${number1} - ${number2}`)
+    return(`${number1} - ${number2}`)
 
   //multiplication
   }else if (questionType===3) {
     number1=Math.floor((Math.random() * 15) + 1)
     number2=Math.floor((Math.random() * 15) + 1)
     answer=number1*number2
-    console.log(`${number1} * ${number2}`)
+    return(`${number1} * ${number2}`)
 
   //division
   }else if (questionType===4) {
-    number1=Math.floor((Math.random() * 15) + 1)
-    number2=Math.floor((Math.random() * 15) + 1)
-   answer=number1/number2
-  console.log(`${number1} / ${number2}`)
+    number1=Math.floor((Math.random() * 12) + 1)
+    number2=Math.floor((Math.random() * 4) + 1)
+    number1=number1*number2
+    answer=number1/number2
+    return`${number1} / ${number2}`
   }
 
 }
