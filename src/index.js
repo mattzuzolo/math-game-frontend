@@ -11,6 +11,8 @@ const playerUl = document.getElementById('player-list');
 const timerContainer = document.getElementById('timer-container');
 const questionContainer = document.getElementById('question-container');
 const answerContainer = document.getElementById('answer-container');
+const correctCounterContainer = document.getElementById('correct-counter');
+const strikeContainer = document.getElementById('strike-container');
 
 fetch(userUrl)
 .then(response=>response.json())
@@ -83,10 +85,41 @@ function countdown(timer){
   }, 1000)
 }
 
-function gameSetup() {
+function answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum){
 
-    let currentQuestion = mathQuiz();
-    let currentAnswer = answer;
+
+  let currentQuestion = mathQuiz();
+  let currentAnswer = answer; //current answer not updating
+  let userAnswer;
+  let newStrike = "X"
+  let newCorrect = "|"
+
+  question.innerText = currentQuestion;
+  strikes.innerText = "Current strikes: ";
+
+  answerForm.addEventListener("click", function(e){
+      e.preventDefault();
+      if (e.target.id === "submit-answer"){
+
+        let userAnswer = parseInt(e.target.parentElement.getElementsByTagName("INPUT")[0].value);
+
+
+        if (userAnswer == answer){
+          alert("Correct!")
+          document.getElementById('user-input').value='';
+          correctCounter.innerText += newCorrect;
+          answerHandling(answerForm, question, strikes);
+        }
+        else {
+          strikes.innerText += newStrike;
+        }
+
+      }
+  })
+
+}
+
+function gameSetup() {
 
     //create timer
     let timer = document.createElement("h4");
@@ -97,8 +130,22 @@ function gameSetup() {
     //create question
     let question = document.createElement("h2");
     question.style.textAlign = "center";
-    question.innerText = currentQuestion
+    //question.innerText = currentQuestion
     questionContainer.append(question);
+
+    let correctCounter = document.createElement("h1")
+    let correctCounterNum = 0;
+    correctCounter.style.textAlign = "center";
+    correctCounter.innerText = `You have correctly answered: `;
+    correctCounterContainer.append(correctCounter)
+
+    //strikes
+    let strikes = document.createElement("h1");
+    //strikes.innerText = "Current strikes: ";
+    strikes.style.textAlign = "center";
+    strikes.style.color = "red";
+    strikeContainer.append(strikes)
+
 
     //create answer form
     let answerForm = document.createElement("form")
@@ -116,19 +163,7 @@ function gameSetup() {
     answerForm.append(submitButton);
     answerContainer.append(answerForm);
 
-    answerForm.addEventListener("click", function(e){
-        e.preventDefault();
-
-        if (e.target.id === "submit-answer"){
-          debugger;
-          let userAnswer = parseInt(e.target.parentElement.getElementsByTagName("INPUT")[0].value);
-
-          if (userAnswer == currentAnswer){
-            alert("Correct!")
-          }
-
-        }
-    })
+    answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum);
 
 }
 
@@ -142,29 +177,29 @@ function mathQuiz() {
 
   //addition
   if (questionType===1){
-    number1=Math.floor((Math.random() * 300) + 1)
-    number2=Math.floor((Math.random() * 300) + 1)
+    number1=Math.floor((Math.random() * 10) + 1)
+    number2=Math.floor((Math.random() * 10) + 1)
     answer=number1+number2
     return(`${number1} + ${number2}`)
 
   //subtraction
   }else if (questionType===2) {
-    number1=Math.floor((Math.random() * 300) + 1)
-    number2=Math.floor((Math.random() * 300) + 1)
+    number1=Math.floor((Math.random() * 10) + 1)
+    number2=Math.floor((Math.random() * 10) + 1)
     answer=number1-number2
     return(`${number1} - ${number2}`)
 
   //multiplication
   }else if (questionType===3) {
-    number1=Math.floor((Math.random() * 15) + 1)
-    number2=Math.floor((Math.random() * 15) + 1)
+    number1=Math.floor((Math.random() * 5) + 1)
+    number2=Math.floor((Math.random() * 5) + 1)
     answer=number1*number2
     return(`${number1} * ${number2}`)
 
   //division
   }else if (questionType===4) {
-    number1=Math.floor((Math.random() * 12) + 1)
-    number2=Math.floor((Math.random() * 4) + 1)
+    number1=Math.floor((Math.random() * 2) + 1)
+    number2=Math.floor((Math.random() * 1) + 1)
     number1=number1*number2
     answer=number1/number2
     return`${number1} / ${number2}`
