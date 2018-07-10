@@ -16,6 +16,8 @@ const gameplayContainer = document.getElementById('gameplay-container');
 const postGameContainer = document.getElementById("post-game-option-container")
 const loginField = document.getElementById("user")
 
+
+
 fetch(userUrl)
 .then(response=>response.json())
 .then(data=>displayUser(data))
@@ -87,6 +89,10 @@ function gameOver(activeScore){
     let playerName = loginField.value
     let userId = getUserId(playerName);
     addGameBackend(userId, activeScore)
+      document.getElementById("submit-answer").disabled = false;
+      document.getElementById('start-game').disabled = false
+      document.getElementById('button').disabled = false
+      // document.getElementById('gameplay-container').innerHTML=
 }
 
 //disables DOM functionality so user cannot continue playing after game is over
@@ -125,7 +131,7 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
           // display next question if the answer is incorrect
             currentQuestion = mathQuiz()
             question.innerText = currentQuestion;
-
+            document.getElementById("user-input").value=""
             if (strikes.innerText == "Current strikes:XXX"){
               gameOver(activeScore);
             }
@@ -138,7 +144,13 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 //This method setups the DOM for the game.
 //Also starts the timer
 function gameSetup() {
-
+  questionContainer.innerHTML=""
+  answerContainer.innerHTML=""
+  correctCounterContainer.innerHTML=""
+  strikeContainer.innerHTML=""
+  postGameContainer.innerHTML=""
+document.getElementById('start-game').disabled = true
+document.getElementById('button').disabled = true
     //create timer
     let timer = document.createElement("h4");
     timer.style.textAlign = "center";
@@ -227,7 +239,13 @@ function addGameBackend(userId, score){
      return fetch(gameUrl, postConfig)
    }
    addGame(gameUrl,submissionBody)
+   playerUl.innerHTML=" "
+   fetch(userUrl)
+   .then(response=>response.json())
+   .then(data=>displayUser(data))
+
 }
+
 
 //Start the game by clicking start
 document.getElementById("start-game").addEventListener("click", gameSetup)
