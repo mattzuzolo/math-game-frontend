@@ -87,12 +87,12 @@ function countdown(timer){
 
 function answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum){
 
-
+// debugger;
   let currentQuestion = mathQuiz();
   // let currentAnswer = answer;
   let userAnswer;
   let newStrike = "X"
-  let newCorrect = "|"
+  // let newCorrect = "|"
 
   question.innerText = currentQuestion;
   strikes.innerText = "Current strikes: ";
@@ -106,12 +106,17 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 
         if (userAnswer == answer){
           // alert("Correct!")
+          let corretCount=parseInt(++correctCounterNum)
+          // debugger;
           document.getElementById('user-input').value='';
-          correctCounter.innerText += newCorrect;
+          correctCounter.innerText =`You have correctly answered: ${corretCount}`;
           answerHandling(answerForm, question, strikes);
         }
         else {
           strikes.innerText += newStrike;
+          // display next question if the answer is incorrect
+            currentQuestion = mathQuiz()
+            question.innerText = currentQuestion;
           if (strikes.innerText == "Current strikes:XXX"){
             alert("GAME OVER!")
           }
@@ -210,3 +215,5 @@ function mathQuiz() {
   }
 
 }
+let button=document.getElementById("button")
+button.addEventListener("click",gameSetup)
