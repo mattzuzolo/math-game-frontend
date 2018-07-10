@@ -5,6 +5,9 @@ let store = {user: [], game: []}
 const userUrl = "http://localhost:3000/api/v1/users"
 const gameUrl = "http://localhost:3000/api/v1/games"
 
+//Active toggle
+let gameActive = false;
+
 //Elements
 const playerUl = document.getElementById('player-list');
 const timerContainer = document.getElementById('timer-container');
@@ -75,6 +78,7 @@ function mathQuiz() {
 
 //causing game to end when parameters are met
 function gameOver(activeScore){
+    gameActive = false
     disableGameplay();
     alert("GAME OVER!!!")
     let continueToScoreboard = document.createElement("h1");
@@ -128,7 +132,8 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
             currentQuestion = mathQuiz()
             question.innerText = currentQuestion;
             document.getElementById("user-input").value=""
-            if (strikes.innerText == "Current strikes:XXX"){
+            if (strikes.innerText == "Current strikes:XXX" && (gameActive == true)){
+              document.getElementById("timer-text").innerText = `Too many strikes!`
               gameOver(activeScore);
             }
         }
@@ -149,12 +154,20 @@ function gameSetup() {
 
   document.getElementById('start-game').disabled = true
   document.getElementById('button').disabled = true
+
+  //strikes
+    let strikes = document.createElement("h1");
+    //strikes.innerText = "Current strikes: ";
+    strikes.style.textAlign = "center";
+    strikes.style.color = "red";
+    strikeContainer.append(strikes)
+
     //create timer
     let timer = document.createElement("h4");
     timer.style.textAlign = "center";
     timer.id = "timer-text"
     // expireTime()
-    countdown(timer)
+    countdown(timer, strikes)
     timerContainer.append(timer);
 
     //create question
@@ -169,12 +182,7 @@ function gameSetup() {
     correctCounter.innerText = `You have correctly answered: `;
     correctCounterContainer.append(correctCounter)
 
-    //strikes
-    let strikes = document.createElement("h1");
-    //strikes.innerText = "Current strikes: ";
-    strikes.style.textAlign = "center";
-    strikes.style.color = "red";
-    strikeContainer.append(strikes)
+
 
     //create answer form
     let answerForm = document.createElement("form")
@@ -248,15 +256,24 @@ function addGameBackend(userId, score){
 //Start the game by clicking start
 document.getElementById("start-game").addEventListener("click", gameSetup)
 
-function countdown(timer){
+function countdown(timer, strikes){
+  gameActive = true;
   let startingTime = 10; //60 seconds on clock to start
   let gameCountdown = setInterval(function(){
     startingTime--;
-    if (startingTime >= 0){
+    if ((startingTime >= 0 && gameActive == true)){
       timer.innerText = `There are ${startingTime} seconds remaining!`
-    } else {
-      timer.innerText = `Out of time!`
+    }
+    else if ((strikes.innerText == "Current strikes:XXX") && gameActive == true){
+      timer.innerText = `Too many strikes!`
       gameOver()
+      clearInterval(gameCountdown)
+    }
+    else {
+      if (gameActive == true){
+        timer.innerText = `Out of time!`
+        gameOver()
+      }
       clearInterval(gameCountdown)
     }
   }, 1000)
