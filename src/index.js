@@ -16,8 +16,6 @@ const gameplayContainer = document.getElementById('gameplay-container');
 const postGameContainer = document.getElementById("post-game-option-container")
 const loginField = document.getElementById("user")
 
-
-
 fetch(userUrl)
 .then(response=>response.json())
 .then(data=>displayUser(data))
@@ -34,8 +32,6 @@ function displayIndividualGame(games) {
       document.getElementById(`${individualGame.user_id}`).innerHTML+=`<li>Game${individualGame.id}:${individualGame.score}</li>`
     })
 }
-
-
 
 
 //Gameplay functionality
@@ -98,7 +94,7 @@ function gameOver(activeScore){
 //disables DOM functionality so user cannot continue playing after game is over
 function disableGameplay(){
   document.getElementById("submit-answer").disabled = true;
-  timerContainer.remove(document.getElementById("timer-text"))
+//  timerContainer.remove(document.getElementById("timer-text"))
 
   let gameOverText = document.createElement("h4");
   gameOverText.innerText = "GAME OVER!"
@@ -145,17 +141,19 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 //Also starts the timer
 function gameSetup() {
   questionContainer.innerHTML=""
+  timerContainer.innerHTML=""
   answerContainer.innerHTML=""
   correctCounterContainer.innerHTML=""
   strikeContainer.innerHTML=""
   postGameContainer.innerHTML=""
-document.getElementById('start-game').disabled = true
-document.getElementById('button').disabled = true
+
+  document.getElementById('start-game').disabled = true
+  document.getElementById('button').disabled = true
     //create timer
     let timer = document.createElement("h4");
     timer.style.textAlign = "center";
     timer.id = "timer-text"
-    expireTime()
+    // expireTime()
     countdown(timer)
     timerContainer.append(timer);
 
@@ -251,22 +249,42 @@ function addGameBackend(userId, score){
 document.getElementById("start-game").addEventListener("click", gameSetup)
 
 function countdown(timer){
-  let startingTime = 60; //60 seconds on clock to start
-  setInterval(function(){
+  let startingTime = 10; //60 seconds on clock to start
+  let gameCountdown = setInterval(function(){
     startingTime--;
     if (startingTime >= 0){
       timer.innerText = `There are ${startingTime} seconds remaining!`
+    } else {
+      timer.innerText = `Out of time!`
+      gameOver()
+      clearInterval(gameCountdown)
     }
   }, 1000)
+
 }
 
-function expireTime(){
-  // let startingTime = 60; //60 seconds on clock to start
-  // startingTime--;
-  window.setTimeout(function(){
-    gameOver();
-  }, 60000)
-}
+// function countdown(timer){
+//   let startingTime = 10; //60 seconds on clock to start
+//   setInterval(function(){
+//     startingTime--;
+//     if (startingTime >= 0){
+//       debugger;
+//       timer.innerText = `There are ${startingTime} seconds remaining!`
+//     } else {
+//       debugger;
+//       countdown().clearInterval(timer)
+//       gameOver()
+//     }
+//   }, 1000)
+// }
+
+// function expireTime(){
+//   // let startingTime = 60; //60 seconds on clock to start
+//   // startingTime--;
+//   window.setTimeout(function(){
+//     gameOver();
+//   }, 60000)
+// }
 
 function getUserId(playerName){
   if (playerName === "Matt"){
