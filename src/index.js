@@ -89,7 +89,7 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 
 
   let currentQuestion = mathQuiz();
-  let currentAnswer = answer; //current answer not updating
+  // let currentAnswer = answer;
   let userAnswer;
   let newStrike = "X"
   let newCorrect = "|"
@@ -105,13 +105,17 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 
 
         if (userAnswer == answer){
-          alert("Correct!")
+          // alert("Correct!")
           document.getElementById('user-input').value='';
           correctCounter.innerText += newCorrect;
           answerHandling(answerForm, question, strikes);
         }
         else {
           strikes.innerText += newStrike;
+          if (strikes.innerText == "Current strikes:XXX"){
+            alert("GAME OVER!")
+          }
+
         }
 
       }
