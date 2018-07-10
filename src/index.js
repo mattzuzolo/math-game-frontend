@@ -7,6 +7,7 @@ const gameUrl = "http://localhost:3000/api/v1/games"
 
 //Active toggle
 let gameActive = false;
+let activeScore = 0;
 
 //Elements
 const playerUl = document.getElementById('player-list');
@@ -78,7 +79,7 @@ function mathQuiz() {
 
 //causing game to end when parameters are met
 function gameOver(activeScore){
-  debugger;
+  // debugger;
     gameActive = false
     disableGameplay();
     alert("GAME OVER!!!")
@@ -201,7 +202,7 @@ function gameSetup() {
     answerForm.append(submitButton);
     answerContainer.append(answerForm);
 
-    let activeScore = 0; //define here so score doesn't reset after
+    activeScore = 0; //define here so score doesn't reset after
 
     answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum, activeScore);
 }
@@ -272,8 +273,10 @@ function countdown(timer, strikes){
     }
     else {
       if (gameActive == true){
-        debugger;
+        // debugger;
         timer.innerText = `Out of time!`
+        index=document.getElementsByTagName("h1")[0].innerText.length
+        activeScore=parseInt(document.getElementsByTagName("h1")[0].innerText.slice(29,index))
         gameOver(activeScore)
       }
       clearInterval(gameCountdown)
