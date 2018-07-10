@@ -13,6 +13,8 @@ const questionContainer = document.getElementById('question-container');
 const answerContainer = document.getElementById('answer-container');
 const correctCounterContainer = document.getElementById('correct-counter');
 const strikeContainer = document.getElementById('strike-container');
+const gameplayContainer = document.getElementById('gameplay-container');
+const postGameContainer = document.getElementById("post-game-option-container")
 
 fetch(userUrl)
 .then(response=>response.json())
@@ -81,7 +83,9 @@ function countdown(timer){
   let startingTime = 60; //60 seconds on clock to start
   setInterval(function(){
     startingTime--;
-    timer.innerText = `There are ${startingTime} seconds remaining!`
+    if (startingTime >= 0){
+      timer.innerText = `There are ${startingTime} seconds remaining!`
+    }
   }, 1000)
 }
 
@@ -118,7 +122,8 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
             currentQuestion = mathQuiz()
             question.innerText = currentQuestion;
           if (strikes.innerText == "Current strikes:XXX"){
-            alert("GAME OVER!")
+            //alert("GAME OVER!")
+            gameOver();
           }
 
         }
@@ -128,11 +133,40 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 
 }
 
+function expireTime(){
+  // let startingTime = 60; //60 seconds on clock to start
+  // startingTime--;
+  window.setTimeout(function(){
+    gameOver();
+  }, 60000)
+}
+
+function gameOver(){
+  disableGameplay();
+  alert("GAME OVER!!!")
+  let continueToScoreboard = document.createElement("h1");
+  continueToScoreboard.innerText = "Click here to see the scoreboard"
+  continueToScoreboard.style.textAlign = "center";
+  postGameContainer.append(continueToScoreboard);
+}
+
+function disableGameplay(){
+  document.getElementById("submit-answer").disabled = true;
+  timerContainer.remove(document.getElementById("timer-text"))
+
+  let gameOverText = document.createElement("h4");
+  gameOverText.innerText = "GAME OVER!"
+  timerContainer.append(gameOverText);
+
+}
+
 function gameSetup() {
 
     //create timer
     let timer = document.createElement("h4");
     timer.style.textAlign = "center";
+    timer.id = "timer-text"
+    expireTime()
     countdown(timer)
     timerContainer.append(timer);
 
