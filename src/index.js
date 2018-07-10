@@ -15,6 +15,7 @@ const correctCounterContainer = document.getElementById('correct-counter');
 const strikeContainer = document.getElementById('strike-container');
 const gameplayContainer = document.getElementById('gameplay-container');
 const postGameContainer = document.getElementById("post-game-option-container")
+const loginField = document.getElementById("user")
 
 fetch(userUrl)
 .then(response=>response.json())
@@ -57,7 +58,7 @@ function addUserBackend(name){
 
 
 function addGameBackend(userId, score){
-
+  console.log("Your score will be submitted to the API momentarily")
   let submissionBody = {
     "user_id": userId,
     "score": score
@@ -89,7 +90,7 @@ function countdown(timer){
   }, 1000)
 }
 
-function answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum){
+function answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum, activeScore){
 
 // debugger;
   let currentQuestion = mathQuiz();
@@ -108,12 +109,14 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
         let userAnswer = parseInt(e.target.parentElement.getElementsByTagName("INPUT")[0].value);
 
 
+
         if (userAnswer == answer){
           // alert("Correct!")
-          let corretCount=parseInt(++correctCounterNum)
           // debugger;
-          document.getElementById('user-input').value='';
-          correctCounter.innerText =`You have correctly answered: ${corretCount}`;
+          activeScore++ //= parseInt(++correctCounterNum)
+
+          document.getElementById('user-input').value = '';
+          correctCounter.innerText =`You have correctly answered: ${activeScore}`;
           answerHandling(answerForm, question, strikes);
         }
         else {
@@ -123,7 +126,7 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
             question.innerText = currentQuestion;
           if (strikes.innerText == "Current strikes:XXX"){
             //alert("GAME OVER!")
-            gameOver();
+            gameOver(activeScore);
           }
 
         }
@@ -141,13 +144,29 @@ function expireTime(){
   }, 60000)
 }
 
-function gameOver(){
-  disableGameplay();
+function gameOver(activeScore){
+    disableGameplay();
     alert("GAME OVER!!!")
     let continueToScoreboard = document.createElement("h1");
     continueToScoreboard.innerText = "Click here to see the scoreboard"
     continueToScoreboard.style.textAlign = "center";
     postGameContainer.append(continueToScoreboard);
+    //access real userId when we have OO ready
+    let playerName = loginField.value
+    let userId = getUserId(playerName);
+    addGameBackend(userId, activeScore)
+}
+
+function getUserId(playerName){
+  if (playerName === "Matt"){
+    return 1;
+  }
+  else if (playerName === "Steven"){
+    return 2;
+  }
+  else{
+    return null;
+  }
 }
 
 function disableGameplay(){
@@ -206,7 +225,9 @@ function gameSetup() {
     answerForm.append(submitButton);
     answerContainer.append(answerForm);
 
-    answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum);
+    let activeScore = 0;
+
+    answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum, activeScore);
 
 }
 
