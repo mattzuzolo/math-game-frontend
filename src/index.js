@@ -143,11 +143,11 @@ function expireTime(){
 
 function gameOver(){
   disableGameplay();
-  alert("GAME OVER!!!")
-  let continueToScoreboard = document.createElement("h1");
-  continueToScoreboard.innerText = "Click here to see the scoreboard"
-  continueToScoreboard.style.textAlign = "center";
-  postGameContainer.append(continueToScoreboard);
+    alert("GAME OVER!!!")
+    let continueToScoreboard = document.createElement("h1");
+    continueToScoreboard.innerText = "Click here to see the scoreboard"
+    continueToScoreboard.style.textAlign = "center";
+    postGameContainer.append(continueToScoreboard);
 }
 
 function disableGameplay(){
