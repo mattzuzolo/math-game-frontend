@@ -78,6 +78,7 @@ function mathQuiz() {
 
 //causing game to end when parameters are met
 function gameOver(activeScore){
+  debugger;
     gameActive = false
     disableGameplay();
     alert("GAME OVER!!!")
@@ -266,13 +267,14 @@ function countdown(timer, strikes){
     }
     else if ((strikes.innerText == "Current strikes:XXX") && gameActive == true){
       timer.innerText = `Too many strikes!`
-      gameOver()
+      gameOver(activeScore)
       clearInterval(gameCountdown)
     }
     else {
       if (gameActive == true){
+        debugger;
         timer.innerText = `Out of time!`
-        gameOver()
+        gameOver(activeScore)
       }
       clearInterval(gameCountdown)
     }
@@ -309,9 +311,6 @@ function getUserId(playerName){
   }
   else if (playerName === "Steven"){
     return 2;
-  }
-  else{
-    return null;
   }
 }
 
