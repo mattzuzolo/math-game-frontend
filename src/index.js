@@ -5,9 +5,12 @@ let store = {user: [], game: []}
 const userUrl = "http://localhost:3000/api/v1/users"
 const gameUrl = "http://localhost:3000/api/v1/games"
 
-//Active toggle
-let gameActive = false;
+//manages current score during game
 let activeScore = 0;
+
+//checks if game a game is in progress
+let gameActive = false;
+
 
 //Elements
 const playerUl = document.getElementById('player-list');
@@ -43,38 +46,39 @@ function displayIndividualGame(games) {
 //Gameplay functionality
 //generates new question
 function mathQuiz() {
-
   //determintes question type (+, -, *, /)
-  questionType=Math.floor((Math.random() * 4) + 1)
-
+  questionType = Math.floor((Math.random() * 4) + 1)
   //addition
-  if (questionType===1){
-    number1=Math.floor((Math.random() * 10) + 1)
-    number2=Math.floor((Math.random() * 10) + 1)
-    answer=number1+number2
-    return(`${number1} + ${number2}`)
+  if (questionType === 1){
+    number1 = Math.floor((Math.random() * 10) + 1)
+    number2 = Math.floor((Math.random() * 10) + 1)
+    answer = number1 + number2
+    return (`${number1} + ${number2}`);
+  }
 
   //subtraction
-  }else if (questionType===2) {
-    number1=Math.floor((Math.random() * 10) + 1)
-    number2=Math.floor((Math.random() * 10) + 1)
-    answer=number1-number2
-    return(`${number1} - ${number2}`)
+  else if (questionType === 2) {
+    number1 = Math.floor((Math.random() * 10) + 1)
+    number2 = Math.floor((Math.random() * 10) + 1)
+    answer = number1 - number2
+    return(`${number1} - ${number2}`);
+  }
 
   //multiplication
-  }else if (questionType===3) {
-    number1=Math.floor((Math.random() * 5) + 1)
-    number2=Math.floor((Math.random() * 5) + 1)
-    answer=number1*number2
-    return(`${number1} * ${number2}`)
+  else if (questionType === 3) {
+    number1 = Math.floor((Math.random() * 5) + 1)
+    number2 = Math.floor((Math.random() * 5) + 1)
+    answer = number1 * number2
+    return(`${number1} * ${number2}`);
+  }
 
   //division
-  }else if (questionType===4) {
-    number1=Math.floor((Math.random() * 2) + 1)
-    number2=Math.floor((Math.random() * 1) + 1)
-    number1=number1*number2
-    answer=number1/number2
-    return`${number1} / ${number2}`
+  else if (questionType === 4) {
+    number1 = Math.floor((Math.random() * 2) + 1)
+    number2 = Math.floor((Math.random() * 1) + 1)
+    number1 = number1*number2
+    answer = number1/number2
+    return (`${number1} / ${number2}`);
   }
 
 }
@@ -160,7 +164,7 @@ function gameSetup() {
   postGameContainer.innerHTML=""
 
   startGameButton.disabled = true
-  document.getElementById('button').disabled = true
+  loginButton.disabled = true
 
   //strikes
     let strikes = document.createElement("h1");
