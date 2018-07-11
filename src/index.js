@@ -26,20 +26,57 @@ const startGameButton = document.getElementById("start-game-button")
 
 fetch(userUrl)
 .then(response=>response.json())
-.then(data=>displayUser(data))
+.then(data=>saveUsersLocally(data))
+
+//Object-oriented refactor:
+
+function saveUsersLocally(data){
+  data.forEach(function(individualUser){
+    let currentUser = new User(individualUser)
+    store["user"].push(currentUser)
+    currentUser.displayUser()
+    saveGamesLocally(individualUser.games)
+  })
+
+}
+
+function saveGamesLocally(games){
+  games.forEach(function(individualGame){
+    let currentGame = new Game(individualGame)
+    store["game"].push(currentGame)
+    currentGame.displayGame(individualGame)
+ })
+}
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////
+/////////////////////
+/////////////////////
+
+
+
 
 //Scoreboard display
-function displayUser(data){
-  data.forEach(function(individualPlayer){
-    playerUl.innerHTML+=`<li>${individualPlayer.name}<ul id=${individualPlayer.id}></ul></li>`
-    displayIndividualGame(individualPlayer.games)
-  })
-}
-function displayIndividualGame(games) {
-    games.forEach(function(individualGame){
-      document.getElementById(`${individualGame.user_id}`).innerHTML+=`<li>Game${individualGame.id}:${individualGame.score}</li>`
-    })
-}
+// function displayUser(data){
+//   data.forEach(function(individualPlayer){
+//     playerUl.innerHTML+=`<li>${individualPlayer.name}<ul id=${individualPlayer.id}></ul></li>`
+//     displayIndividualGame(individualPlayer.games)
+//   })
+// }
+// function displayIndividualGame(games) {
+//     games.forEach(function(individualGame){
+//       document.getElementById(`${individualGame.user_id}`).innerHTML+=`<li>Game${individualGame.id}:${individualGame.score}</li>`
+//     })
+// }
 
 //Gameplay functionality
 //generates new question
@@ -207,46 +244,46 @@ function gameSetup() {
 }
 
 //These functions manage GET and POST requests with FETCH API
-function addUserBackend(name){
-  let submissionBody = {
-    "name": name,
-  };
-  function addUser(userUrl,submissionBody) {
-     const postConfig = {
-       Accept: "application/json",
-       method: "POST",
-       headers: {
-         "Content-type": "application/json"
-       },
-       body: JSON.stringify(submissionBody)
-     };
-     return fetch(userUrl, postConfig)
-   }
-   addUser(userUrl,submissionBody);
-}
+// function addUserBackend(name){
+//   let submissionBody = {
+//     "name": name,
+//   };
+//   function addUser(userUrl,submissionBody) {
+//      const postConfig = {
+//        Accept: "application/json",
+//        method: "POST",
+//        headers: {
+//          "Content-type": "application/json"
+//        },
+//        body: JSON.stringify(submissionBody)
+//      };
+//      return fetch(userUrl, postConfig)
+//    }
+//    addUser(userUrl,submissionBody);
+// }
 
-function addGameBackend(userId, score){
-  let submissionBody = {
-    "user_id": userId,
-    "score": score
-  }
-  function addGame(gameUrl,submissionBody) {
-     const postConfig = {
-       Accept: "application/json",
-       method: "POST",
-       headers: {
-         "Content-type": "application/json"
-       },
-       body: JSON.stringify(submissionBody)
-     };
-     return fetch(gameUrl, postConfig)
-   }
-   addGame(gameUrl,submissionBody)
-   playerUl.innerHTML=" "
-   fetch(userUrl)
-   .then(response=>response.json())
-   .then(data=>displayUser(data))
-}
+// function addGameBackend(userId, score){
+//   let submissionBody = {
+//     "user_id": userId,
+//     "score": score
+//   }
+//   function addGame(gameUrl,submissionBody) {
+//      const postConfig = {
+//        Accept: "application/json",
+//        method: "POST",
+//        headers: {
+//          "Content-type": "application/json"
+//        },
+//        body: JSON.stringify(submissionBody)
+//      };
+//      return fetch(gameUrl, postConfig)
+//    }
+//    addGame(gameUrl,submissionBody)
+//    playerUl.innerHTML=" "
+//    fetch(userUrl)
+//    .then(response=>response.json())
+//    .then(data=>displayUser(data))
+// }
 
 
 //Start the game by logging in or starting without login
@@ -289,4 +326,25 @@ function getUserId(playerName){
   else if (playerName === "Steven"){
     return 2;
   }
+}
+
+function findOrCreateUser(playerName){
+
+  //check store to see if use exists.
+    //return user id
+
+
+  //if no user --> create user. Add to store. THEN add to API.
+    //return user id
+}
+
+
+function findUser(){
+
+}
+
+function createUser(playerName){
+  let newUser = new User ({"name": playerName})
+  store["user"].push(newUser);
+  newUser.addUserBackend();
 }

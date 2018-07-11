@@ -7,6 +7,8 @@ class Game {
     this.apiId = obj.id;
     this.userId = obj.user_id;
   }
-
+  displayGame() {
+    document.getElementById(`${this.userId}`).innerHTML+=`<li>Game${this.localGameId}:${this.score}</li>`
+  }
 
 }
