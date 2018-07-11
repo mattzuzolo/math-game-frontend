@@ -243,49 +243,6 @@ function gameSetup() {
   answerHandling(answerForm, question, answerInputField, strikes, successCounterTextElement, activeScore);
 }
 
-//These functions manage GET and POST requests with FETCH API
-// function addUserBackend(name){
-//   let submissionBody = {
-//     "name": name,
-//   };
-//   function addUser(userUrl,submissionBody) {
-//      const postConfig = {
-//        Accept: "application/json",
-//        method: "POST",
-//        headers: {
-//          "Content-type": "application/json"
-//        },
-//        body: JSON.stringify(submissionBody)
-//      };
-//      return fetch(userUrl, postConfig)
-//    }
-//    addUser(userUrl,submissionBody);
-// }
-
-// function addGameBackend(userId, score){
-//   let submissionBody = {
-//     "user_id": userId,
-//     "score": score
-//   }
-//   function addGame(gameUrl,submissionBody) {
-//      const postConfig = {
-//        Accept: "application/json",
-//        method: "POST",
-//        headers: {
-//          "Content-type": "application/json"
-//        },
-//        body: JSON.stringify(submissionBody)
-//      };
-//      return fetch(gameUrl, postConfig)
-//    }
-//    addGame(gameUrl,submissionBody)
-//    playerUl.innerHTML=" "
-//    fetch(userUrl)
-//    .then(response=>response.json())
-//    .then(data=>displayUser(data))
-// }
-
-
 //Start the game by logging in or starting without login
 loginButton.addEventListener("click", gameSetup)
 startGameButton.addEventListener("click", gameSetup)
@@ -330,16 +287,22 @@ function getUserId(playerName){
 
 function findOrCreateUser(playerName){
 
-  //check store to see if use exists.
-    //return user id
+  if (findUser(playerName)){
+    return findUser(playerName).localUserId
+  }
 
-
-  //if no user --> create user. Add to store. THEN add to API.
-    //return user id
+  else {
+    return createUser(playerName)
+  }
 }
 
-
-function findUser(){
+//pass in the username
+//check if username exists (param is a string to find)
+//if it exists then find the id associated with that name
+function findUser(playerName){
+  return store["user"].find( (individualUser) => {
+    return playerName === individualUser.name
+  })
 
 }
 
@@ -347,4 +310,10 @@ function createUser(playerName){
   let newUser = new User ({"name": playerName})
   store["user"].push(newUser);
   newUser.addUserBackend();
+}
+
+function createGame(userId, score){
+  let newGame = new Game({"user_id": userId, "score": score})
+  store["game"].push(newGame);
+  newGame.addGameBackend();
 }
