@@ -18,7 +18,9 @@ const correctCounterContainer = document.getElementById('correct-answer-containe
 const strikeContainer = document.getElementById('strike-container');
 const gameplayContainer = document.getElementById('gameplay-container');
 const postGameContainer = document.getElementById("post-game-option-container")
-const loginField = document.getElementById("user")
+const loginField = document.getElementById("login-field")
+const loginButton = document.getElementById("login-button")
+const startGameButton = document.getElementById("start-game-button")
 
 fetch(userUrl)
 .then(response=>response.json())
@@ -92,7 +94,7 @@ function gameOver(activeScore){
     let userId = getUserId(playerName);
     addGameBackend(userId, activeScore)
       document.getElementById("submit-answer").disabled = false;
-      document.getElementById('start-game').disabled = false
+      startGameButton.disabled = false
       document.getElementById('button').disabled = false
       // document.getElementById('gameplay-container').innerHTML=
 }
@@ -146,6 +148,9 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 
 //This method setups the DOM for the game.
 //Also starts the timer
+
+loginButton.addEventListener("click",gameSetup)
+
 function gameSetup() {
   questionContainer.innerHTML=""
   timerContainer.innerHTML=""
@@ -154,7 +159,7 @@ function gameSetup() {
   strikeContainer.innerHTML=""
   postGameContainer.innerHTML=""
 
-  document.getElementById('start-game').disabled = true
+  startGameButton.disabled = true
   document.getElementById('button').disabled = true
 
   //strikes
@@ -256,7 +261,7 @@ function addGameBackend(userId, score){
 
 
 //Start the game by clicking start
-document.getElementById("start-game").addEventListener("click", gameSetup)
+startGameButton.addEventListener("click", gameSetup)
 
 function countdown(timer, strikes){
   gameActive = true;
@@ -317,7 +322,3 @@ function getUserId(playerName){
     return 2;
   }
 }
-
-
-let button=document.getElementById("button")
-button.addEventListener("click",gameSetup)
