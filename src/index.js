@@ -277,6 +277,7 @@ function countdown(timer, strikes){
         timer.innerText = `Out of time!`
         index=document.getElementsByTagName("h1")[0].innerText.length
         activeScore=parseInt(document.getElementsByTagName("h1")[0].innerText.slice(29,index))
+
         gameOver(activeScore)
       }
       clearInterval(gameCountdown)
