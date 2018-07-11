@@ -7,45 +7,33 @@
   </head>
   <body>
 
-    <button id="start-game" type="button" name="button">Start game</button>
-
+    <h1>Mental Math</h1>
 
     <div id="gameplay-container">
-
         <div id="timer-container"></div>
-        <br>
         <div id="question-container"></div>
-        <br>
         <div id="answer-container"></div>
-        <br>
-        <div id="correct-counter"></div>
-        <br>
+        <div id="correct-answer-container"></div>
         <div id="strike-container"></div>
-        <br>
         <div id="post-game-option-container"></div>
-
-
-
-    </div>
-<form id="usernameInput">
-  <label for="user"></label>
-  <input type="text" id="user" placeholder="Please enter your name to start the game..">
-  <input type="button" value="Enter" id="button">
-</form>
-
     </div>
 
-    <br>
-    <br>
+    <div id="login-container">
+      <form id="login-form">
+        <label for="user"></label>
+        <input id="login-field" type="text" placeholder="Enter username">
+        <input id="login-button" type="button" value="Login">
+      </form>
+        <button id="start-game-button" type="button" name="button">Start game</button>
+    </div>
+
     <hr>
 
-    <h1>Player names and scores</h1>
-    <ul id="player-list">
-    </ul>
+    <h1>Game history:</h1>
+    <ul id="player-list"></ul>
 
-
-    <!-- <script src="src/game.js" charset="utf-8"></script> -->
-    <!-- <script src="src/user.js" charset="utf-8"></script> -->
+    <script src="src/game.js" charset="utf-8"></script>
+    <script src="src/user.js" charset="utf-8"></script>
     <script src="src/index.js" charset="utf-8"></script>
   </body>
 </html>
