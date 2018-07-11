@@ -214,7 +214,6 @@ function addUserBackend(name){
   let submissionBody = {
     "name": name,
   };
-
   function addUser(userUrl,submissionBody) {
      const postConfig = {
        Accept: "application/json",
@@ -228,13 +227,12 @@ function addUserBackend(name){
    }
    addUser(userUrl,submissionBody);
 }
+
 function addGameBackend(userId, score){
-  console.log("Your score will be submitted to the API momentarily")
   let submissionBody = {
     "user_id": userId,
     "score": score
   }
-
   function addGame(gameUrl,submissionBody) {
      const postConfig = {
        Accept: "application/json",
@@ -251,63 +249,40 @@ function addGameBackend(userId, score){
    fetch(userUrl)
    .then(response=>response.json())
    .then(data=>displayUser(data))
-
 }
 
+
+//Start the game by logging in or starting without login
 loginButton.addEventListener("click", gameSetup)
-//Start the game by clicking start
 startGameButton.addEventListener("click", gameSetup)
 
 function countdown(timer, strikes){
   gameActive = true;
-  let startingTime = 10; //60 seconds on clock to start
+  let timeRemaining = 10; //60 seconds on clock to start
+
   let gameCountdown = setInterval(function(){
-    startingTime--;
-    if ((startingTime >= 0 && gameActive == true)){
-      timer.innerText = `There are ${startingTime} seconds remaining!`
+    timeRemaining--;
+    if ((timeRemaining >= 0 && gameActive == true)){
+      timer.innerText = `There are ${timeRemaining} seconds remaining!`
     }
+
     else if ((strikes.innerText == "Current strikes:XXX") && gameActive == true){
       timer.innerText = `Too many strikes!`
       gameOver(activeScore)
       clearInterval(gameCountdown)
     }
+
     else {
       if (gameActive == true){
-        // debugger;
         timer.innerText = `Out of time!`
         index=document.getElementsByTagName("h1")[0].innerText.length
         activeScore=parseInt(document.getElementsByTagName("h1")[0].innerText.slice(29,index))
-
         gameOver(activeScore)
       }
       clearInterval(gameCountdown)
     }
   }, 1000)
-
 }
-
-// function countdown(timer){
-//   let startingTime = 10; //60 seconds on clock to start
-//   setInterval(function(){
-//     startingTime--;
-//     if (startingTime >= 0){
-//       debugger;
-//       timer.innerText = `There are ${startingTime} seconds remaining!`
-//     } else {
-//       debugger;
-//       countdown().clearInterval(timer)
-//       gameOver()
-//     }
-//   }, 1000)
-// }
-
-// function expireTime(){
-//   // let startingTime = 60; //60 seconds on clock to start
-//   // startingTime--;
-//   window.setTimeout(function(){
-//     gameOver();
-//   }, 60000)
-// }
 
 function getUserId(playerName){
   if (playerName === "Matt"){
