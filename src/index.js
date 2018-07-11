@@ -265,14 +265,14 @@ function countdown(timer, strikes){
   }, 1000)
 }
 
-function getUserId(playerName){
-  if (playerName === "Matt"){
-    return 1;
-  }
-  else if (playerName === "Steven"){
-    return 2;
-  }
-}
+// function getUserId(playerName){
+//   if (playerName === "Matt"){
+//     return 1;
+//   }
+//   else if (playerName === "Steven"){
+//     return 2;
+//   }
+// }
 
 
 //this should always return an ID. Either new or existing
