@@ -11,7 +11,6 @@ let activeScore = 0;
 //checks if game a game is in progress
 let gameActive = false;
 
-
 //Elements
 const playerUl = document.getElementById('player-list');
 const timerContainer = document.getElementById('timer-container');
@@ -128,7 +127,7 @@ function answerHandling(answerForm, question, answerInputField, strikes, success
         //check user answer against actual answer
         if (userAnswer == answer){
           activeScore++
-          document.getElementById('user-input').value = ''; //resets input field to ready for next question
+          document.getElementById("answer-input").value = ''; //resets input field to ready for next question
           successCounterTextElement.innerText =`You have correctly answered: ${activeScore}`; //updates the current score
           answerHandling(answerForm, question, strikes); //
         }
@@ -207,8 +206,6 @@ function gameSetup() {
   answerHandling(answerForm, question, answerInputField, strikes, successCounterTextElement, activeScore);
 }
 
-
-
 //These functions manage GET and POST requests with FETCH API
 function addUserBackend(name){
   let submissionBody = {
@@ -275,8 +272,9 @@ function countdown(timer, strikes){
     else {
       if (gameActive == true){
         timer.innerText = `Out of time!`
-        index=document.getElementsByTagName("h1")[0].innerText.length
-        activeScore=parseInt(document.getElementsByTagName("h1")[0].innerText.slice(29,index))
+        let index = document.getElementsByTagName("h1")[1].innerText.length
+        activeScore=parseInt(document.getElementsByTagName("h1")[1].innerText.slice(29,index))
+        debugger;
         gameOver(activeScore)
       }
       clearInterval(gameCountdown)
