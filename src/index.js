@@ -29,7 +29,6 @@ fetch(userUrl)
 .then(data=>saveUsersLocally(data))
 
 //Object-oriented refactor:
-
 function saveUsersLocally(data){
   data.forEach(function(individualUser){
     let currentUser = new User(individualUser)
@@ -47,36 +46,6 @@ function saveGamesLocally(games){
     currentGame.displayGame(individualGame)
  })
 }
-
-
-
-
-
-
-
-
-
-
-
-/////////////////////
-/////////////////////
-/////////////////////
-
-
-
-
-//Scoreboard display
-// function displayUser(data){
-//   data.forEach(function(individualPlayer){
-//     playerUl.innerHTML+=`<li>${individualPlayer.name}<ul id=${individualPlayer.id}></ul></li>`
-//     displayIndividualGame(individualPlayer.games)
-//   })
-// }
-// function displayIndividualGame(games) {
-//     games.forEach(function(individualGame){
-//       document.getElementById(`${individualGame.user_id}`).innerHTML+=`<li>Game${individualGame.id}:${individualGame.score}</li>`
-//     })
-// }
 
 //Gameplay functionality
 //generates new question
@@ -132,8 +101,11 @@ function gameOver(activeScore){
 
     //access real userId when we have object-oriented ready
     let playerName = loginField.value
-    let userId = getUserId(playerName);
-    addGameBackend(userId, activeScore)
+    let userId = findOrCreateUser(playerName); //might have to change this back to find id
+    // createGame(userId, activeScore);
+    // debugger;
+    userId.createGame(activeScore)
+
 }
 
 //disables DOM functionality so user cannot continue playing after game is over
@@ -285,35 +257,55 @@ function getUserId(playerName){
   }
 }
 
+
+//this should always return an ID. Either new or existing
 function findOrCreateUser(playerName){
 
   if (findUser(playerName)){
-    return findUser(playerName).localUserId
+    //THIS WORKS!!!
+    return findUser(playerName)
   }
 
   else {
+    // debugger;
     return createUser(playerName)
   }
 }
 
-//pass in the username
-//check if username exists (param is a string to find)
-//if it exists then find the id associated with that name
 function findUser(playerName){
   return store["user"].find( (individualUser) => {
     return playerName === individualUser.name
   })
-
 }
 
 function createUser(playerName){
   let newUser = new User ({"name": playerName})
   store["user"].push(newUser);
   newUser.addUserBackend();
+  return newUser;
 }
 
-function createGame(userId, score){
-  let newGame = new Game({"user_id": userId, "score": score})
-  store["game"].push(newGame);
-  newGame.addGameBackend();
-}
+// function createGame(userId, score){
+//   let newGame = new Game({"user_id": userId, "score": score})
+//   store["game"].push(newGame);
+//   newGame.addGameBackend();
+// }
+
+
+
+
+
+//extra functionality
+
+//Scoreboard display
+// function displayUser(data){
+//   data.forEach(function(individualPlayer){
+//     playerUl.innerHTML+=`<li>${individualPlayer.name}<ul id=${individualPlayer.id}></ul></li>`
+//     displayIndividualGame(individualPlayer.games)
+//   })
+// }
+// function displayIndividualGame(games) {
+//     games.forEach(function(individualGame){
+//       document.getElementById(`${individualGame.user_id}`).innerHTML+=`<li>Game${individualGame.id}:${individualGame.score}</li>`
+//     })
+// }

@@ -29,4 +29,11 @@ class User {
      addUser(userUrl,submissionBody);
   }
 
+
+
+  createGame(score){
+    let newGame = new Game({"user_id": this.localUserId, "score": score})
+    store["game"].push(newGame);
+    newGame.addGameBackend();
+  }
 }

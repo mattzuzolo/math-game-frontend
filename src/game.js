@@ -28,10 +28,6 @@ class Game {
        return fetch(gameUrl, postConfig)
      }
      addGame(gameUrl,submissionBody)
-     // playerUl.innerHTML=" "
-     // fetch(userUrl)
-     // .then(response=>response.json())
-     // .then(data=>displayUser(data))
   }
 
 }
