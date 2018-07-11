@@ -85,28 +85,27 @@ function mathQuiz() {
 
 //causing game to end when parameters are met
 function gameOver(activeScore){
-  // debugger;
-    gameActive = false
+    gameActive = false //toggles game to inactive so that other functions dont attempt to end game
     disableGameplay();
     alert("GAME OVER!!!")
+
+    //Create elements below game to direct player to scoreboard or restart
     let continueToScoreboard = document.createElement("h1");
     continueToScoreboard.innerText = "Click here to see the scoreboard"
     continueToScoreboard.style.textAlign = "center";
     postGameContainer.append(continueToScoreboard);
-    //access real userId when we have OO ready
+
+    //access real userId when we have object-oriented ready
     let playerName = loginField.value
     let userId = getUserId(playerName);
     addGameBackend(userId, activeScore)
-      document.getElementById("submit-answer").disabled = false;
-      startGameButton.disabled = false
-      document.getElementById('button').disabled = false
-      // document.getElementById('gameplay-container').innerHTML=
 }
 
 //disables DOM functionality so user cannot continue playing after game is over
 function disableGameplay(){
-  document.getElementById("submit-answer").disabled = true;
-//  timerContainer.remove(document.getElementById("timer-text"))
+  startGameButton.disabled = false
+  loginButton.disabled = false
+  document.getElementById("submit-answer").disabled = false;
 
   let gameOverText = document.createElement("h4");
   gameOverText.innerText = "GAME OVER!"
