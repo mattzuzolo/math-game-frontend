@@ -6,7 +6,8 @@
     <title></title>
   </head>
   <body>
-
+<audio id="correct" src="./mp3/correct.mp3"></audio>
+<audio id="wrong" src="./mp3/wrong.mp3"></audio>
     <h1>Mental Math</h1>
 
     <div id="gameplay-container">
@@ -26,14 +27,18 @@
       </form>
         <button id="start-game-button" type="button" name="button">Start game</button>
         <button id="open-scoreboard-button" type="button" name="button">View scoreboard</button>
+        <button id="view-scoreboard" type="button" data-action="scoreboard" name="button">View Scoreboard</button>
     </div>
 
 
 
     <hr>
 
+    <div class="scoreboardBackground">
+
     <h1>Game history:</h1>
     <ul id="player-list"></ul>
+  </div>
 
     <script src="src/game.js" charset="utf-8"></script>
     <script src="src/user.js" charset="utf-8"></script>

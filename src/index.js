@@ -23,7 +23,8 @@ const postGameContainer = document.getElementById("post-game-option-container")
 const loginField = document.getElementById("login-field")
 const loginButton = document.getElementById("login-button")
 const startGameButton = document.getElementById("start-game-button")
-
+const correctAnswerSound=document.getElementById("correct")
+const wrongAnswerSound=document.getElementById("wrong")
 fetch(userUrl)
 .then(response=>response.json())
 .then(data=>saveUsersLocally(data))
@@ -35,12 +36,13 @@ function saveUsersLocally(data){
     store["user"].push(currentUser)
     currentUser.displayUser()
     saveGamesLocally(individualUser.games)
+
   })
 
 }
 
 function saveGamesLocally(games){
-  games.forEach(function(individualGame){
+  return games.forEach(function(individualGame){
     let currentGame = new Game(individualGame)
     store["game"].push(currentGame)
     currentGame.displayGame(individualGame)
@@ -101,10 +103,19 @@ function gameOver(activeScore){
 
     //access real userId when we have object-oriented ready
     let playerName = loginField.value
-    let userId = findOrCreateUser(playerName); //might have to change this back to find id
+    let user = findOrCreateUser(playerName); //might have to change this back to find id
     // createGame(userId, activeScore);
     // debugger;
-    userId.createGame(activeScore)
+      newGame=user.createGame(activeScore)
+      // debugger;
+      if(document.getElementById(newGame.userId)===null){
+        user.displayUser();
+        newGame.displayGame();
+      }else {
+        newGame.displayGame()
+      }
+
+    // debugger;
 
 }
 
@@ -135,12 +146,14 @@ function answerHandling(answerForm, question, answerInputField, strikes, success
 
         //check user answer against actual answer
         if (userAnswer == answer){
+          correctAnswerSound.play()
           activeScore++
           document.getElementById("answer-input").value = ''; //resets input field to ready for next question
           successCounterTextElement.innerText =`You have correctly answered: ${activeScore}`; //updates the current score
           answerHandling(answerForm, question, strikes); //
         }
         else {
+          wrongAnswerSound.play()
           strikes.innerText += newStrike;
           // display next question if the answer is incorrect
             currentQuestion = mathQuiz()
@@ -239,8 +252,12 @@ function countdown(timer, strikes){
       if (gameActive == true){
         timer.innerText = `Out of time!`
         let index = document.getElementsByTagName("h1")[1].innerText.length
-        activeScore=parseInt(document.getElementsByTagName("h1")[1].innerText.slice(29,index))
-        debugger;
+        if(index <= 29){
+          activeScore = 0
+        }else {
+          activeScore = parseInt(document.getElementsByTagName("h1")[1].innerText.slice(29,index))
+        }
+        // debugger;
         gameOver(activeScore)
       }
       clearInterval(gameCountdown)
@@ -284,6 +301,31 @@ function createUser(playerName){
   newUser.addUserBackend();
   return newUser;
 }
+
+document.addEventListener("click",function (event) {
+  if (event.target.dataset.action === "scoreboard") {
+    document.getElementById("login-form").style.display="none"
+    document.getElementsByTagName("hr")[0].style.display="none"
+    gameplayContainer.style.display="none"
+// debugger;
+document.addEventListener("click",function (event) {
+
+  if(event.target.dataset.action === undefined){
+    document.getElementById("login-form").style.display="block"
+    document.getElementsByTagName("hr")[0].style.display="block"
+    gameplayContainer.style.display="block"
+    // debugger;
+  }
+})
+
+  }
+
+  if (event.target.dataset.action === "quit-scoreboard") {
+    document.getElementById("login-form").style.display="block"
+    document.getElementsByTagName("hr")[0].style.display="block"
+  }
+
+})
 
 // function createGame(userId, score){
 //   let newGame = new Game({"user_id": userId, "score": score})

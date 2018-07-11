@@ -8,6 +8,7 @@ class Game {
     this.userId = obj.user_id;
   }
   displayGame() {
+    // debugger;
     document.getElementById(`${this.userId}`).innerHTML+=`<li>Game${this.localGameId}:${this.score}</li>`
   }
 
