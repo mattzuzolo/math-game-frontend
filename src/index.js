@@ -17,7 +17,7 @@ const playerUl = document.getElementById('player-list');
 const timerContainer = document.getElementById('timer-container');
 const questionContainer = document.getElementById('question-container');
 const answerContainer = document.getElementById('answer-container');
-const correctCounterContainer = document.getElementById('correct-answer-container');
+const correctAnswerContainer = document.getElementById('correct-answer-container');
 const strikeContainer = document.getElementById('strike-container');
 const gameplayContainer = document.getElementById('gameplay-container');
 const postGameContainer = document.getElementById("post-game-option-container")
@@ -41,7 +41,6 @@ function displayIndividualGame(games) {
       document.getElementById(`${individualGame.user_id}`).innerHTML+=`<li>Game${individualGame.id}:${individualGame.score}</li>`
     })
 }
-
 
 //Gameplay functionality
 //generates new question
@@ -105,7 +104,7 @@ function gameOver(activeScore){
 function disableGameplay(){
   startGameButton.disabled = false
   loginButton.disabled = false
-  document.getElementById("submit-answer").disabled = false;
+  document.getElementById("submit-answer-button").disabled = false;
 
   let gameOverText = document.createElement("h4");
   gameOverText.innerText = "GAME OVER!"
@@ -114,7 +113,7 @@ function disableGameplay(){
 
 //this function obtains user answers and resets question and answer so use can continue playing
 //this function operates recursively so that the user can continue playing after answering a question
-function answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum, activeScore){
+function answerHandling(answerForm, question, answerInputField, strikes, successCounterTextElement, activeScore){
   let currentQuestion = mathQuiz();
   let userAnswer;
   let newStrike = "X"
@@ -123,14 +122,14 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
 
   answerForm.addEventListener("click", function(e){
       e.preventDefault();
-      if (e.target.id === "submit-answer"){
+      if (e.target.id === "submit-answer-button"){
         let userAnswer = parseInt(e.target.parentElement.getElementsByTagName("INPUT")[0].value);
 
         //check user answer against actual answer
         if (userAnswer == answer){
           activeScore++
           document.getElementById('user-input').value = ''; //resets input field to ready for next question
-          correctCounter.innerText =`You have correctly answered: ${activeScore}`; //updates the current score
+          successCounterTextElement.innerText =`You have correctly answered: ${activeScore}`; //updates the current score
           answerHandling(answerForm, question, strikes); //
         }
         else {
@@ -138,7 +137,7 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
           // display next question if the answer is incorrect
             currentQuestion = mathQuiz()
             question.innerText = currentQuestion;
-            document.getElementById("user-input").value=""
+            document.getElementById("answer-input").value=""
             if (strikes.innerText == "Current strikes:XXX" && (gameActive == true)){
               document.getElementById("timer-text").innerText = `Too many strikes!`
               gameOver(activeScore);
@@ -146,73 +145,66 @@ function answerHandling(answerForm, question, inputField, strikes, correctCounte
         }
       }
   })
-
 }
+
 
 //This method setups the DOM for the game.
 //Also starts the timer
-
-loginButton.addEventListener("click",gameSetup)
-
 function gameSetup() {
   questionContainer.innerHTML=""
   timerContainer.innerHTML=""
   answerContainer.innerHTML=""
-  correctCounterContainer.innerHTML=""
+  correctAnswerContainer.innerHTML=""
   strikeContainer.innerHTML=""
   postGameContainer.innerHTML=""
 
+  //disables buttons when game starts to prevent game duplication
   startGameButton.disabled = true
   loginButton.disabled = true
 
   //strikes
-    let strikes = document.createElement("h1");
-    //strikes.innerText = "Current strikes: ";
-    strikes.style.textAlign = "center";
-    strikes.style.color = "red";
-    strikeContainer.append(strikes)
+  let strikes = document.createElement("h1");
+  strikes.style.textAlign = "center";
+  strikes.style.color = "red";
+  strikeContainer.append(strikes)
 
-    //create timer
-    let timer = document.createElement("h4");
-    timer.style.textAlign = "center";
-    timer.id = "timer-text"
-    // expireTime()
-    countdown(timer, strikes)
-    timerContainer.append(timer);
+  //create timer
+  let timer = document.createElement("h4");
+  timer.style.textAlign = "center";
+  timer.id = "timer-text";
+  countdown(timer, strikes);
+  timerContainer.append(timer);
 
-    //create question
-    let question = document.createElement("h2");
-    question.style.textAlign = "center";
-    //question.innerText = currentQuestion
-    questionContainer.append(question);
+  //create question
+  let question = document.createElement("h2");
+  question.style.textAlign = "center";
+  questionContainer.append(question);
 
-    let correctCounter = document.createElement("h1")
-    let correctCounterNum = 0;
-    correctCounter.style.textAlign = "center";
-    correctCounter.innerText = `You have correctly answered: `;
-    correctCounterContainer.append(correctCounter)
+  //begin counter
+  let successCounterTextElement = document.createElement("h1")
+  successCounterTextElement.style.textAlign = "center";
+  successCounterTextElement.innerText = `You have correctly answered: `;
+  correctAnswerContainer.append(successCounterTextElement)
 
+  //create answer form
+  let answerForm = document.createElement("form")
+  let answerInputField = document.createElement("input")
+  let answerSubmitButton = document.createElement("button")
 
+  answerForm.style.textAlign = "center";
+  answerSubmitButton.innerText = "Submit answer"
 
-    //create answer form
-    let answerForm = document.createElement("form")
-    let inputField = document.createElement("input")
-    let submitButton = document.createElement("button")
+  answerForm.id = "answer-form"
+  answerInputField.id = "answer-input"
+  answerSubmitButton.id = "submit-answer-button"
 
-    answerForm.style.textAlign = "center";
-    submitButton.innerText = "Submit answer"
+  answerForm.append(answerInputField);
+  answerForm.append(answerSubmitButton);
+  answerContainer.append(answerForm);
 
-    answerForm.id = "answer-form"
-    inputField.id = "user-input"
-    submitButton.id = "submit-answer"
+  activeScore = 0; //define here so score doesn't reset after — declared at global scope.
 
-    answerForm.append(inputField);
-    answerForm.append(submitButton);
-    answerContainer.append(answerForm);
-
-    activeScore = 0; //define here so score doesn't reset after
-
-    answerHandling(answerForm, question, inputField, strikes, correctCounter, correctCounterNum, activeScore);
+  answerHandling(answerForm, question, answerInputField, strikes, successCounterTextElement, activeScore);
 }
 
 
@@ -262,7 +254,7 @@ function addGameBackend(userId, score){
 
 }
 
-
+loginButton.addEventListener("click", gameSetup)
 //Start the game by clicking start
 startGameButton.addEventListener("click", gameSetup)
 
